@@ -1,6 +1,6 @@
 import { ActionIcon, Menu, Text, Tooltip } from '@mantine/core';
 import { TbDots, TbSettings, TbTrash } from 'react-icons/tb';
-import { HiOutlineClipboardCopy } from 'react-icons/all';
+import { HiOutlineClipboardCopy } from 'react-icons/hi';
 import { GiTeleport } from 'react-icons/gi';
 import { DoorColumn } from '../../../store/doors';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ const ActionsMenu: React.FC<{ data: CellContext<DoorColumn, unknown> }> = ({ dat
   return (
     <Menu position="right-start" width={200}>
       <Menu.Target>
-        <Tooltip label="Door actions">
+        <Tooltip label="Actions">
           <ActionIcon color="blue.4" variant="transparent">
             <TbDots size={24} />
           </ActionIcon>
@@ -34,7 +34,7 @@ const ActionsMenu: React.FC<{ data: CellContext<DoorColumn, unknown> }> = ({ dat
             navigate('/settings/general');
           }}
         >
-          Settings
+          Paramètres
         </Menu.Item>
         <Menu.Item
           icon={<HiOutlineClipboardCopy size={18} />}
@@ -43,7 +43,7 @@ const ActionsMenu: React.FC<{ data: CellContext<DoorColumn, unknown> }> = ({ dat
             fetchNui('notify', 'Settings copied');
           }}
         >
-          Copy settings
+          Copier les paramètres
         </Menu.Item>
         <Menu.Item
           icon={<GiTeleport size={18} />}
@@ -52,23 +52,23 @@ const ActionsMenu: React.FC<{ data: CellContext<DoorColumn, unknown> }> = ({ dat
             fetchNui('teleportToDoor', data.row.getValue('id'));
           }}
         >
-          Teleport to door
+          Se téléporter à la porte
         </Menu.Item>
         <Menu.Item
           color="red"
           icon={<TbTrash size={18} />}
           onClick={() =>
             openConfirmModal({
-              title: 'Confirm deletion',
+              title: 'Confirmer la suppression',
               centered: true,
               withCloseButton: false,
               children: (
                 <Text>
-                  Are you sure you want to delete
+                  Êtes-vous sûr de vouloir supprimer la porte{' '}
                   <Text component="span" weight={700}>{` ${data.row.getValue('name')}`}</Text>?
                 </Text>
               ),
-              labels: { confirm: 'Confirm', cancel: 'Cancel' },
+              labels: { confirm: 'Confirmer', cancel: 'Annuler' },
               confirmProps: { color: 'red' },
               onConfirm: () => {
                 fetchNui('deleteDoor', data.row.getValue('id'));

@@ -39,6 +39,14 @@ const DoorTable: React.FC = () => {
         enableHiding: false,
       },
       {
+        id: "key_id",
+        header: "Key ID",
+        accessorKey: "key_id",
+        cell: (info) => info.getValue(),
+        enableHiding: false,
+        enableGlobalFilter: false,
+      },
+      {
         id: 'zone',
         header: 'Zone',
         accessorKey: 'zone',
@@ -120,7 +128,7 @@ const DoorTable: React.FC = () => {
         <Center sx={{ height: '100%' }}>
           <Stack align="center">
             <TbSearch size={48} />
-            <Text size="lg">No results found</Text>
+            <Text size="lg">Aucune porte trouvée</Text>
           </Stack>
         </Center>
       )}

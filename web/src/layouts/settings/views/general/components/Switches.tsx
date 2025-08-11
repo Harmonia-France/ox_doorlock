@@ -17,38 +17,38 @@ const Switches: React.FC = () => {
     <>
       <SimpleGrid cols={2} pt={16}>
         <TooltipSwitch
-          label="Locked"
-          infoCircle="Sets whether the targeting door is locked by default"
+          label="Verrouiller"
+          infoCircle="Permet de verrouiller la porte par défaut"
           value={locked || false}
           toggle={() => toggleCheckbox('state')}
         />
         <TooltipSwitch
           label="Double"
-          infoCircle="Enable if the targeting door is a double door"
+          infoCircle="Est-ce une double porte ?"
           value={double || false}
           toggle={() => toggleCheckbox('doors')}
         />
         <TooltipSwitch
-          label="Automatic"
-          infoCircle="Enable if the targeting door is moving automatically (Garage, poles, etc...)"
+          label="Automatique"
+          infoCircle="Est-ce une porte automatique ? (porte de garage par exemple)"
           value={automatic || false}
           toggle={() => toggleCheckbox('auto')}
         />
         <TooltipSwitch
           label="Lockpick"
-          infoCircle="Enables the targeting door to be lockpicked. Can define skill check difficulties in Lockpick tab, otherwise uses config defaults"
+          infoCircle="Est-ce une porte crochetable ?"
           value={lockpick || false}
           toggle={() => toggleCheckbox('lockpick')}
         />
         <TooltipSwitch
-          label="Hide UI"
-          infoCircle="Hides UI indicators for the targeting door"
+          label="Cacher l'UI"
+          infoCircle="Cacher l'UI de la porte"
           value={hideUi || false}
           toggle={() => toggleCheckbox('hideUi')}
         />
         <TooltipSwitch
-          label="Hold Open"
-          infoCircle="Sets whether the targeting door(s) should stay open while unlocked"
+          label="Garder la porte ouverte"
+          infoCircle="Permet de garder la porte ouverte tant qu'elle est déverrouillée"
           value={holdOpen || false}
           toggle={() => toggleCheckbox('holdOpen')}
         />

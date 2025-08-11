@@ -2,9 +2,6 @@ import { Box, Stack, Tabs } from '@mantine/core';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { TbSettings, TbBriefcase, TbBottle, TbBell, TbArrowBackUp, TbUser, TbLock } from 'react-icons/tb';
 import General from './views/general';
-import Characters from './views/characters';
-import Groups from './views/groups';
-import Items from './views/items';
 import Sound from './views/sound';
 import Submit from './Submit';
 import { useStore } from '../../store';
@@ -32,15 +29,6 @@ const Settings: React.FC = () => {
             <Tabs.Tab value="general" icon={<TbSettings size={20} />}>
               General
             </Tabs.Tab>
-            <Tabs.Tab value="characters" icon={<TbUser size={20} />}>
-              Characters
-            </Tabs.Tab>
-            <Tabs.Tab value="groups" icon={<TbBriefcase size={20} />}>
-              Groups
-            </Tabs.Tab>
-            <Tabs.Tab value="items" icon={<TbBottle size={20} />}>
-              Items
-            </Tabs.Tab>
             <Tabs.Tab value="lockpick" disabled={!lockpick} icon={<TbLock size={20} />}>
               Lockpick
             </Tabs.Tab>
@@ -52,9 +40,6 @@ const Settings: React.FC = () => {
         <Stack p={16} sx={{ width: '100%' }} justify="space-between">
           <Routes>
             <Route path="/general" element={<General />} />
-            <Route path="/characters" element={<Characters />} />
-            <Route path="/groups" element={<Groups />} />
-            <Route path="/items" element={<Items />} />
             <Route path="/sound" element={<Sound />} />
             <Route path="/lockpick" element={<Lockpick />} />
           </Routes>

@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './index.scss';
 import App from './App';
 import { debugData } from './utils/debugData';
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider, Global } from '@mantine/core';
 import { customTheme } from './theme';
 import { isEnvBrowser } from './utils/misc';
 import { StoreState } from './store';
@@ -17,16 +17,11 @@ debugData<DoorColumn[]>([
     data: [
       {
         name: 'Door name',
+        key_id: 'key_id',
         passcode: 'Supersecret123',
         autolock: 300,
         id: 0,
         zone: 'Mission Row',
-        characters: ['charid1', 'charid2'],
-        groups: {
-          ['police']: 0,
-          ['ambulance']: 1,
-        },
-        items: [{ name: 'mrpd_key', metadata: 'lspd_key', remove: true }],
         lockpickDifficulty: [],
         lockSound: null,
         unlockSound: null,
@@ -50,16 +45,11 @@ debugData(
       data: {
         [0]: {
           name: 'New door',
+          key_id: 'supersecret123',
           passcode: 'Supersecret123',
           autolock: 300,
           id: 2,
           zone: 'Mission Row',
-          characters: ['charid1', 'charid2'],
-          groups: {
-            ['police']: 0,
-            ['ambulance']: 1,
-          },
-          items: [{ name: 'mrpd_key', metadata: 'lspd_key', remove: true }],
           lockSound: null,
           unlockSound: null,
           maxDistance: 15.2,
@@ -106,7 +96,7 @@ if (isEnvBrowser()) {
 
 ReactDOM.render(
   <React.StrictMode>
-    <MantineProvider withNormalizeCSS withGlobalStyles theme={customTheme}>
+    <MantineProvider theme={customTheme}>
       <ModalsProvider modalProps={{ transition: 'slide-up' }}>
         <HashRouter>
           <App />

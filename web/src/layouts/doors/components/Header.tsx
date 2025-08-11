@@ -23,7 +23,7 @@ const Header: React.FC = () => {
 
   return (
     <Group className={classes.main}>
-      <Tooltip label="Create a new door" transition="pop">
+      <Tooltip label="Créer une nouvelle porte" transition="pop">
         <ActionIcon
           variant="light"
           color="blue"

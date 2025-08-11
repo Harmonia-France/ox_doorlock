@@ -11,6 +11,7 @@ const Inputs: React.FC = () => {
   //     state.doorRate,
   //   ]);
   const doorName = useStore((state) => state.name);
+  const keyId = useStore((state) => state.key_id);
   const passcode = useStore((state) => state.passcode);
   const autolockInterval = useStore((state) => state.autolock);
   const interactDistance = useStore((state) => state.maxDistance);
@@ -25,6 +26,7 @@ const Inputs: React.FC = () => {
   //   ]);
 
   const setDoorName = useSetters((setter) => setter.setName);
+  const setKeyId = useSetters((setter) => setter.setKeyId);
   const setPasscode = useSetters((setter) => setter.setPasscode);
   const setAutolockInterval = useSetters((setter) => setter.setAutolock);
   const setInteractDistance = useSetters((setter) => setter.setMaxDistance);
@@ -33,29 +35,36 @@ const Inputs: React.FC = () => {
   return (
     <>
       <Grid columns={2} sx={{ fontSize: 16 }}>
-        <Input label="Door name" type="text" value={doorName || ''} setValue={(value: string) => setDoorName(value)} />
-        <Input label="Passcode" type="text" value={passcode || ''} setValue={(value: string) => setPasscode(value)} />
+        <Input label="Nom" type="text" value={doorName || ''} setValue={(value: string) => setDoorName(value)} />
         <Input
-          label="Autolock Interval"
+          label="Key ID"
+          type="text"
+          value={keyId || ''}
+          setValue={(value: string) => setKeyId(value)}
+          infoCircle="Le key ID de la porte, utilisé par le script pour lier les clés à la porte"
+        />
+        <Input label="Code" type="text" value={passcode || ''} setValue={(value: string) => setPasscode(value)} />
+        <Input
+          label="Temps avant de se verrouiller"
           type="number"
           value={autolockInterval || 0}
           setValue={(value: number) => setAutolockInterval(value)}
-          infoCircle="Time in seconds after which the door will be locked"
+          infoCircle="La durée avant que la porte ne se verrouille automatiquement"
         />
         <Input
-          label="Interact Distance"
+          label="Distance d'intéraction"
           type="number"
           value={interactDistance || 0}
           setValue={(value: number) => setInteractDistance(value)}
-          infoCircle="Controls the distance from which the player can interact with the door"
+          infoCircle="Distance à laquelle vous pouvez intéragir avec la porte"
         />
         <Input
-          label="Door Rate"
+          label="Vitesse"
           type="number"
           span={2}
           value={doorRate || 0}
           setValue={(value: number) => setDoorRate(value)}
-          infoCircle="Speed the automatic door will move at"
+          infoCircle="Vitesse d'ouverture/fermeture de la porte"
         />
       </Grid>
     </>

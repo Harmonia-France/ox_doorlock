@@ -8,9 +8,7 @@ export interface StoreState {
   name: StringField;
   passcode: StringField;
   autolock: NumberField;
-  items: { name: StringField; metadata?: StringField; remove: boolean | null }[];
-  characters: StringField[];
-  groups: { name: StringField; grade: NumberField }[];
+  key_id: StringField;
   maxDistance: NumberField;
   doorRate: NumberField;
   lockSound: StringField;
@@ -30,11 +28,9 @@ interface StateSetters {
   setLockSound: (value: StoreState['lockSound']) => void;
   setUnlockSound: (value: StoreState['unlockSound']) => void;
   setName: (value: StoreState['name']) => void;
+  setKeyId: (value: StoreState['key_id']) => void;
   setPasscode: (value: StoreState['passcode']) => void;
   setAutolock: (value: StoreState['autolock']) => void;
-  setItems: (fn: (state: StoreState['items']) => StoreState['items']) => void;
-  setCharacters: (fn: (state: StoreState['characters']) => StoreState['characters']) => void;
-  setGroups: (fn: (state: StoreState['groups']) => StoreState['groups']) => void;
   setLockpickDifficulty: (fn: (state: StoreState['lockpickDifficulty']) => StoreState['lockpickDifficulty']) => void;
   toggleCheckbox: (type: 'state' | 'doors' | 'auto' | 'lockpick' | 'hideUi' | 'holdOpen') => void;
   setMaxDistance: (value: StoreState['maxDistance']) => void;
@@ -45,9 +41,7 @@ export const useStore = create<StoreState>(() => ({
   name: '',
   passcode: '',
   autolock: 0,
-  items: [{ name: '', metadata: '', remove: false }],
-  characters: [''],
-  groups: [{ name: '', grade: undefined }],
+  key_id: '',
   lockpickDifficulty: [''],
   maxDistance: 0,
   doorRate: 0,
@@ -76,15 +70,7 @@ export const useSetters = create<StateSetters>((set: SetState<StateSetters>, get
   setMaxDistance: (value: StoreState['maxDistance']) => useStore.setState(() => ({ maxDistance: value })),
   // Returns previous state, works like usual state setter except if you
   // want to set state straight away, you still have to call the function
-  setItems: (fn) => useStore.setState(({ items: itemFields }) => ({ items: fn(itemFields) })),
-  setCharacters: (fn) =>
-    useStore.setState(({ characters: characterFields }) => ({
-      characters: fn(characterFields),
-    })),
-  setGroups: (fn) =>
-    useStore.setState(({ groups: groupFields }) => ({
-      groups: fn(groupFields),
-    })),
+  setKeyId: (value: StoreState['key_id']) => useStore.setState(() => ({ key_id: value })),
   setLockpickDifficulty: (fn) =>
     useStore.setState(({ lockpickDifficulty: difficultyFields }) => ({
       lockpickDifficulty: fn(difficultyFields),

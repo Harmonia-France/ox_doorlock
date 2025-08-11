@@ -1,11 +1,12 @@
 import { ActionIcon, Button, Center, Text, Tooltip } from '@mantine/core';
 import { useStore } from '../../store';
 import { fetchNui } from '../../utils/fetchNui';
-import { HiOutlineClipboardCheck, HiOutlineTrash } from 'react-icons/all';
+import { HiOutlineClipboardCheck, HiOutlineTrash } from 'react-icons/hi';
 import { useClipboard } from '../../store/clipboard';
 import { useVisibility } from '../../store/visibility';
 import { openConfirmModal } from '@mantine/modals';
 import { useNavigate } from 'react-router-dom';
+import DoorTable from '../doors/components/DoorTable';
 
 const Submit: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Submit: React.FC = () => {
   const handleSubmit = () => {
     const data = { ...useStore.getState() };
     if (data.name === '') data.name = null;
+    if (data.key_id === '') data.key_id = null;
     if (data.passcode === '') data.passcode = null;
     if (data.lockSound === '') data.lockSound = null;
     if (data.unlockSound === '') data.unlockSound = null;
@@ -26,49 +28,6 @@ const Submit: React.FC = () => {
     data.lockpick = data.lockpick || null;
     data.hideUi = data.hideUi || null;
     data.holdOpen = data.holdOpen || null;
-
-    if (data.items && data.items.length > 0) {
-      const items = [];
-
-      for (let i = 0; i < data.items?.length; i++) {
-        const itemField = data.items[i];
-        if (itemField.name && itemField.name !== '') {
-          if (itemField.metadata === '') itemField.metadata = null;
-          if (!itemField.remove) itemField.remove = null;
-          items.push(itemField);
-        }
-      }
-
-      // @ts-ignore
-      data.items = items;
-    }
-
-    if (data.characters && data.characters.length > 0) {
-      const charactersArr: Array<string | number> = [];
-
-      for (let i = 0; i < data.characters.length; i++) {
-        const characterField = data.characters[i];
-        if (characterField && characterField !== '') {
-          charactersArr.push(Number.isNaN(+characterField) ? characterField : +characterField);
-        }
-      }
-
-      // @ts-ignore
-      data.characters = charactersArr;
-    }
-
-    if (data.groups && data.groups.length > 0) {
-      const groupsObj: { [key: string]: number } = {};
-
-      for (let i = 0; i < data.groups.length; i++) {
-        const groupField = data.groups[i];
-        if (groupField.name && groupField.name !== '') groupsObj[groupField.name] = groupField.grade || 0;
-      }
-
-      // @ts-ignore
-      data.groups = groupsObj;
-    } // @ts-ignore
-    else data.groups = null;
 
     if (data.lockpickDifficulty && data.lockpickDifficulty.length > 0) {
       const lockpickArr = [];
@@ -87,9 +46,9 @@ const Submit: React.FC = () => {
   return (
     <Center>
       <Button color="blue" uppercase onClick={() => handleSubmit()} fullWidth>
-        Confirm door
+        Confirmer la création
       </Button>
-      <Tooltip label={!clipboard ? 'No door settings copied' : 'Apply copied settings'} withArrow arrowSize={10}>
+      <Tooltip label={!clipboard ? 'Aucun réglage de porte n\'a été copié' : 'Les règlages ont été copiés !'} withArrow arrowSize={10}>
         <ActionIcon
           variant="outline"
           disabled={!clipboard}
@@ -101,11 +60,9 @@ const Submit: React.FC = () => {
             useStore.setState(
               {
                 name: '',
+                key_id: clipboard.key_id,
                 passcode: clipboard.passcode,
                 autolock: clipboard.autolock,
-                items: clipboard.items,
-                characters: clipboard.characters,
-                groups: clipboard.groups,
                 maxDistance: clipboard.maxDistance,
                 doorRate: clipboard.doorRate,
                 lockSound: clipboard.lockSound,
@@ -135,16 +92,16 @@ const Submit: React.FC = () => {
         disabled={!useStore.getState().id}
         onClick={() =>
           openConfirmModal({
-            title: 'Confirm deletion',
+            title: 'Confirmer la suppression',
             centered: true,
             withCloseButton: false,
             children: (
               <Text>
-                Are you sure you want to delete
+                Êtes-vous sûr de vouloir supprimer la porte
                 <Text component="span" weight={700}>{` ${useStore.getState().name}`}</Text>?
               </Text>
             ),
-            labels: { confirm: 'Confirm', cancel: 'Cancel' },
+            labels: { confirm: 'Confirmer', cancel: 'Annuler' },
             confirmProps: { color: 'red' },
             onConfirm: () => {
               fetchNui('deleteDoor', useStore.getState().id);
