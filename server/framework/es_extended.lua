@@ -1,4 +1,6 @@
-local resourceName = 'es_extended'
+local resourceName = 'framework'
+
+if not GetResourceState(resourceName):find('start') then return end
 
 SetTimeout(0, function()
     local ESX = exports[resourceName]:getSharedObject()
@@ -44,22 +46,30 @@ function IsPlayerInGroup(player, filter)
     if type == 'string' then
         if player.job.name == filter then
             return player.job.name, player.job.grade
+        elseif player.faction.name == filter then
+            return player.faction.name, player.faction.grade
         end
     else
         local tabletype = table.type(filter)
 
         if tabletype == 'hash' then
-            local grade = filter[player.job.name]
+            local jobGrade = filter[player.job.name]
+            local factionGrade = filter[player.faction.name]
 
-            if grade and grade <= player.job.grade then
+            if jobGrade and jobGrade <= player.job.grade then
                 return player.job.name, player.job.grade
+            elseif factionGrade and factionGrade <= player.faction.grade then
+                return player.faction.name, player.faction.grade
             end
         elseif tabletype == 'array' then
             for i = 1, #filter do
                 if player.job.name == filter[i] then
                     return player.job.name, player.job.grade
+                elseif player.faction.name == filter[i] then
+                    return player.faction.name, player.faction.grade
                 end
             end
         end
     end
 end
+

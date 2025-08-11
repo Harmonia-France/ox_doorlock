@@ -20,7 +20,7 @@ local function getDoorFromEntity(data)
 end
 
 exports('getClosestDoorId', function() return ClosestDoor?.id end)
-exports('getDoorIdFromEntity', function(entityId) return getDoorFromEntity(entityId)?.id end) -- same as Entity(entityId).state.doorId
+exports('getDoorIdFromEntity', function(entityId) return getDoorFromEntity(entityId)?.doorId end) -- same as Entity(entityId).state.doorId
 
 local function entityIsNotDoor(data)
 	local entity = type(data) == 'number' and data or data.entity
@@ -47,10 +47,8 @@ local function pickLock(entity)
 
 	TaskTurnPedToFaceCoord(cache.ped, door.coords.x, door.coords.y, door.coords.z, 4000)
 	Wait(500)
-
-	local animDict = lib.requestAnimDict('mp_common_heist')
-
-	TaskPlayAnim(cache.ped, animDict, 'pick_door', 3.0, 1.0, -1, 49, 0, true, true, true)
+	lib.requestAnimDict('mp_common_heist')
+	TaskPlayAnim(cache.ped, 'mp_common_heist', 'pick_door', 3.0, 1.0, -1, 49, 0, true, true, true)
 
 	local success = lib.skillCheck(door.lockpickDifficulty or Config.LockDifficulty)
 	local rand = math.random(1, success and 100 or 5)
@@ -64,8 +62,7 @@ local function pickLock(entity)
 		lib.notify({ type = 'error', description = locale('lockpick_broke') })
 	end
 
-	StopEntityAnim(cache.ped, 'pick_door', animDict, 0)
-	RemoveAnimDict(animDict)
+	StopEntityAnim(cache.ped, 'pick_door', 'mp_common_heist', 0)
 
 	PickingLock = false
 end
@@ -108,7 +105,7 @@ RegisterNUICallback('createDoor', function(data, cb)
 	cb(1)
 	SetNuiFocus(false, false)
 
-	data.state = (data.state == true or data.state == 1) and 1 or 0
+	data.state = data.state and 1 or 0
 
 	if data.items and not next(data.items) then
 		data.items = nil
@@ -221,7 +218,9 @@ RegisterNUICallback('teleportToDoor', function(id, cb)
 	SetNuiFocus(false, false)
 	local doorCoords = doors[id].coords
 	if not doorCoords then return end
+	LocalPlayer.state:set("tpAuthorized", true, true)
 	SetEntityCoords(cache.ped, doorCoords.x, doorCoords.y, doorCoords.z, false, false, false, false)
+	LocalPlayer.state:set("tpAuthorized", false, true)
 end)
 
 RegisterNUICallback('exit', function(_, cb)
@@ -266,6 +265,11 @@ CreateThread(function()
 			ox = true,
 			exp = exports.ox_target
 		}
+	elseif GetResourceState('qb-target'):find('start') then
+		target = {
+			qb = true,
+			exp = exports['qb-target']
+		}
 	elseif GetResourceState('qtarget'):find('start') then
 		target = {
 			qt = true,
@@ -304,6 +308,8 @@ CreateThread(function()
 
 		if target.qt then
 			target.exp:Object({ options = options })
+		elseif target.qb then
+			target.exp:AddGlobalObject({ options = options })
 		end
 
 		options = { locale('pick_lock') }
@@ -312,6 +318,10 @@ CreateThread(function()
 			if resource == cache.resource then
 				if target.qt then
 					return target.exp:RemoveObject(options)
+				end
+
+				if target.qb then
+					return target.exp:RemoveGlobalObject(options)
 				end
 			end
 		end)
